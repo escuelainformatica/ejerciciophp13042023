@@ -9,5 +9,10 @@ class ProductoServicio {
     {
         return Producto::all();
     }
+    public function exist($idProducto):bool
+    {
+        $obj=Producto::find($idProducto);
+        return $obj!==null;
+    }
 
 }

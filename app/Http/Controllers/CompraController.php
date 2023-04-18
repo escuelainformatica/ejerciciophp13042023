@@ -10,26 +10,56 @@ class CompraController extends Controller
 {
     public $compraServicio;
     public $request;
-    public function __construct(CompraServicio $compraServicio,Request $request) 
+    public function __construct(CompraServicio $compraServicio, Request $request)
     {
-        $this->compraServicio=$compraServicio;
-        $this->request=$request;
+        $this->compraServicio = $compraServicio;
+        $this->request = $request;
     }
     public function listar()
     {
-        return view("compra.listar",['compras'=>$this->compraServicio->listar()]);
+        return view("compra.listar", ['compras' => $this->compraServicio->listar()]);
     }
     public function insertar()
     {
+        $compra = $this->compraServicio->createInstanciaRequest();
         if ($this->request->isMethod("POST")) {
-            $compra=$this->compraServicio->createInstanciaRequest();
+            
             if ($this->compraServicio->agregar($compra)) {
                 return redirect()->route("comprarlistar");
             } else {
-                return view("compra.insertar",['compra'=>$compra,'mensaje'=>'producto no encontrado']);
+                return view("compra.insertar", ['compra' => $compra, 'mensaje' => 'producto no encontrado']);
             }
         } else {
-            return view("compra.insertar",['compra'=>new Compra(),'mensaje'=>null]);
+            return view("compra.insertar", ['compra' => $compra, 'mensaje' => null]);
         }
+    }
+    public function formulario()
+    {
+        var_dump($this->request->isMethod("POST"));
+        if ($this->request->isMethod("POST")) {
+            $val = $this->request->validate([
+                'numero' => ['required'],
+                'texto1' => ['required'],
+                'texto2' => ['required'],
+            ]);
+            var_dump($val);            
+        }
+        
+        return view("compra.formulario");
+    }
+    public function formulario2()
+    {
+        if ($this->request->isMethod("POST")) {
+            $val = $this->request->validateWithBag('post', [
+                'numero' => ['required','numeric'],
+                'texto1' => ['required','max:5'],
+                'texto2' => ['required','max:5'],
+            ]);
+          
+        } else {
+            $val=['numero'=>old("numero",0),'texto1'=>old("texto1",''),'texto2'=>old("texto2",'')];
+            
+        }
+        return view("compra.formulario",['val'=>$val]);
     }
 }

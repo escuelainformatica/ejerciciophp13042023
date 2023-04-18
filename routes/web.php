@@ -22,9 +22,11 @@ Route::controller(ProductoController::class)
     ->group(function () {
         Route::get('/', 'listar')->name("productolistar"); // producto/listar
     });
-    Route::controller(CompraController::class)
+Route::controller(CompraController::class)
     ->prefix("compra")
     ->group(function () {
         Route::get('/', 'listar')->name("comprarlistar"); // producto/listar
         Route::any('/insertar', 'insertar'); // producto/insertar
-    });    
+        Route::any('/formulario', 'formulario'); // producto/formulario
+        Route::any('/formulario2', 'formulario2'); // producto/formulario2
+    });
