@@ -31,11 +31,14 @@ class CompraServicio
         }
         return new Compra($val); // no tiene un contexto en la base de datos
     }
-
-
-    public function listar(): ?Collection
+    public function cantPaginas() 
     {
-        return Compra::all();
+        return ceil(Compra::count()/100);  // 2000/100 = 20 paginas.  2001/100 = 21
+    }
+    public function listar()
+    {
+        // select * from compra limit 300,100
+        return Compra::orderBy("idcompra")->paginate(100);  // lee los valores de la ruta ?page=xxxx
     }
     public function agregar(Compra $compra): bool
     {

@@ -15,10 +15,15 @@ class CompraController extends Controller
     {
         $this->compraServicio = $compraServicio;
         $this->request = $request;
+        
     }
     public function listar()
     {
-        return view("compra.listar", ['compras' => compraServicio()->listar()]);
+        return view("compra.listar", [
+            'compras' => compraServicio()->listar(),
+            'cantidadPaginas'=>compraServicio()->cantPaginas(),
+            'pagina'=>request()->get("page",1)
+        ]);
     }
     public function insertar()
     {
@@ -28,15 +33,12 @@ class CompraController extends Controller
             if ($this->compraServicio->agregar($compra)) {
                 return redirect()->route("comprarlistar");
             } else {
-       
-
                 return view("compra.insertar", [
                     'compra' => $compra,
                      'mensaje' => 'producto no encontrado',
                      'productos'=>productoServicio()->obtenerCombo()]);
             }
         } else {
-            $productos=Producto::orderBy('nombre')->get();
             return view("compra.insertar", [
                 'compra' => $compra, 
                 'mensaje' => null,
