@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Compra;
+use App\Models\Producto;
 use App\Servicios\CompraServicio;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class CompraController extends Controller
     }
     public function listar()
     {
-        return view("compra.listar", ['compras' => $this->compraServicio->listar()]);
+        return view("compra.listar", ['compras' => compraServicio()->listar()]);
     }
     public function insertar()
     {
@@ -27,10 +28,19 @@ class CompraController extends Controller
             if ($this->compraServicio->agregar($compra)) {
                 return redirect()->route("comprarlistar");
             } else {
-                return view("compra.insertar", ['compra' => $compra, 'mensaje' => 'producto no encontrado']);
+       
+
+                return view("compra.insertar", [
+                    'compra' => $compra,
+                     'mensaje' => 'producto no encontrado',
+                     'productos'=>productoServicio()->obtenerCombo()]);
             }
         } else {
-            return view("compra.insertar", ['compra' => $compra, 'mensaje' => null]);
+            $productos=Producto::orderBy('nombre')->get();
+            return view("compra.insertar", [
+                'compra' => $compra, 
+                'mensaje' => null,
+                'productos'=>productoServicio()->obtenerCombo()]);
         }
     }
     public function formulario()
@@ -44,7 +54,7 @@ class CompraController extends Controller
             ]);
             var_dump($val);            
         }
-        
+        //return view()->make("compra.formulario");        
         return view("compra.formulario");
     }
     public function formulario2()

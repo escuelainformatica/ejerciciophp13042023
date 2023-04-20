@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\ProductoController;
+use App\Servicios\CompraServicio;
 use App\Servicios\ProductoServicio;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,20 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+function productoServicio():ProductoServicio {    
+    $instancia=app(ProductoServicio::class);
+    /*if($id!==null) {
+        return $instancia->exist($id);
+    }*/
+    return $instancia;
+}
+
+
+
+function compraServicio():CompraServicio {
+    return app(CompraServicio::class,[productoServicio(), request()]);    
+}
+
 
 
 Route::controller(ProductoController::class)

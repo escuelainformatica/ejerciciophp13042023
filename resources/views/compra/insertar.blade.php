@@ -7,7 +7,19 @@
 </style>
 <form method="post">
     @csrf
-    producto:<input type="text" name="idproducto" value="{{$compra->idproducto}}"/><br/>
+    producto:
+    <select name="idproducto">
+        @foreach($productos as $producto)        
+            <option value="{{$producto->idproducto}}" {{$producto->idproducto==$compra->idproducto?'selected':''}}>{{$producto->nombre}}</option>
+        @endforeach
+    </select><br>
+    producto:
+    <select name="idproducto">
+        @foreach(productoServicio()->obtenerCombo() as $producto)        
+            <option value="{{$producto->idproducto}}" {{$producto->idproducto==$compra->idproducto?'selected':''}}>{{$producto->nombre}}</option>
+        @endforeach
+    </select><br>
+
     @error("idproducto","compra")
     <div class="rojo">{!!$message!!}</div>        
     @enderror
